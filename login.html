@@ -32,13 +32,13 @@
       <input type="checkbox" value="remember-me"> Remember me
     </label>
   </div>
-  <button class="w-100 btn btn-lg btn-success " type="submit">Sign in</button>
+  <button class="w-100 btn btn-lg btn-success" id="signinBtn" type="submit">Sign in</button>
 
-  <button type="button" class="w-100 btn btn-lg btn-outline-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  <button type="button" class="w-100 btn btn-lg btn-outline-success" id="createBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
    Create Account
   </button>
   <p class="mt-5 mb-3 text-muted">&copy; Redi2Medi</p>
-</form>
+</form> 
 
 <!-- modal for creating accounts -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -58,5 +58,6 @@
       </div>
     </div>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>
