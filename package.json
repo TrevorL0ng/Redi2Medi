@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/TrevorL0ng/Redi2Medi#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.2",
     "sequelize": "^6.16.1"
   }
 }
