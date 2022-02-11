@@ -2,7 +2,6 @@
   "name": "node-redi2medi-reminder-example",
   "main": "index.js",
   "dependencies": {
-<<<<<<< HEAD
     "-": "^0.0.1",
     "body-parser": "^1.18.3",
     "dotenv": "^5.0.1",
@@ -19,10 +18,5 @@
   },
   "scripts": {
     "start": "node index.js"
-=======
-    "bcrypt": "^5.0.1",
-    "express": "^4.17.2",
-    "sequelize": "^6.16.1"
->>>>>>> d93d2948a62d59daab1b0de8663de4b13f06ce97
   }
 }
