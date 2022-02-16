@@ -41,9 +41,9 @@ const loginFormHandler = async (event) => {
   };
   
   document
-    .querySelector('#signinBtn')
+    .querySelector('#inBtn')
     .addEventListener('submit', loginFormHandler);
   
-//   document
-//     .querySelector('.staticBackdrop')
-//     .addEventListener('submit', signupFormHandler);
+  document
+    .querySelector('.signup-form')
+    .addEventListener('submit', signupFormHandler);
