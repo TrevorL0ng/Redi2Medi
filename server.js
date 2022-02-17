@@ -6,13 +6,17 @@ const exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var moment = require('moment');
 var mysql = require('mysql');
-const dburl = process.env.MYSQL_ADDON 
-    ||   'mysql://' + process.env.DB_USER+ ':' + process.env.DB_PASS 
-        + '@localhost/' + process.env.DB_NAME
-
-const conn = mysql.createConnection(dburl);
+var connection = mysql.createConnection(process.env.JAWSDB_URL);
 
 connection.connect();
+
+connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
+  if (err) throw err;
+
+  console.log('The solution is: ', rows[0].solution);
+});
+
+connection.end();
 
 connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
   if (err) throw err;
