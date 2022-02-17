@@ -6,6 +6,7 @@ const sequelize = require('./config/connection');
 const exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var moment = require('moment');
+const helpers = require('./utils/helpers');
 // const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const app = express();
 const PORT = process.env.PORT || 3001;
