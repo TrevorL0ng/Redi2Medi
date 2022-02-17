@@ -5,6 +5,18 @@ const session = require('express-session');
 const exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var moment = require('moment');
+var mysql = require('mysql');
+var connection = mysql.createConnection(process.env.JAWSDB_URL);
+
+connection.connect();
+
+connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
+  if (err) throw err;
+
+  console.log('The solution is: ', rows[0].solution);
+});
+
+connection.end();
 
 const routes = require('./controllers');
 const sequelize = require('./config/connection');
@@ -47,80 +59,80 @@ app.get('/', function(req, res) {
     });
 });
 
-// // Process an incoming reminder
-// app.post('/schedule', function(req, res) {
+// Process an incoming reminder
+app.post('/schedule', function(req, res) {
     
-//     // Check if user has provided input for all form fields
-//     if (!req.body.name || !req.body.medication || !req.body.remname || !req.body.date || !req.body.time
-//         || req.body.name == '' || req.body.medication == '' || req.body.remname == ''
-//         || req.body.date == '' || req.body.time == '') {
-//             // If no, throw an error
-//             res.render('login', {
-//                 error : "Please fill all required fields!",
-//                 name : req.body.name,
-//                 medication : req.body.medication,
-//                 remname: req.body.remname,
-//                 date : req.body.date,
-//                 time : req.body.time
-//             });
-//             return;
-//     };
+    // Check if user has provided input for all form fields
+    if (!req.body.name || !req.body.medication || !req.body.remname || !req.body.date || !req.body.time
+        || req.body.name == '' || req.body.medication == '' || req.body.remname == ''
+        || req.body.date == '' || req.body.time == '') {
+            // If no, throw an error
+            res.render('login', {
+                error : "Please fill all required fields!",
+                name : req.body.name,
+                medication : req.body.medication,
+                remname: req.body.remname,
+                date : req.body.date,
+                time : req.body.time
+            });
+            return;
+    };
 
-//     // Check if date/time is correct and at least 1 hour in the future
-//     var earliestPossibleDT = moment().add({hours:1, minutes:0});
-//     var appointmentDT = moment(req.body.date+" "+req.body.time);
-//     if (appointmentDT.isBefore(earliestPossibleDT)) {
-//         // If not, show an error
-//         res.render('login', {
-//             error : "You can only schedule reminder that are at least 1 hour in the future!",
-//             name : req.body.name,
-//             medication : req.body.medication,
-//             remname: req.body.remname,
-//             date : req.body.date,
-//             time : req.body.time
-//         });
-//         return;
-//     }
+    // Check if date/time is correct and at least 1 hour in the future
+    var earliestPossibleDT = moment().add({hours:1, minutes:0});
+    var appointmentDT = moment(req.body.date+" "+req.body.time);
+    if (appointmentDT.isBefore(earliestPossibleDT)) {
+        // If not, show an error
+        res.render('login', {
+            error : "You can only schedule reminder that are at least 1 hour in the future!",
+            name : req.body.name,
+            medication : req.body.medication,
+            remname: req.body.remname,
+            date : req.body.date,
+            time : req.body.time
+        });
+        return;
+    }
 
      
-//    // The push notification logic should go here, below is just example of a the logic for 
-//    // SMS notification that I found in one of the tutorials
+   // The push notification logic should go here, below is just example of a the logic for 
+   // SMS notification that I found in one of the tutorials
 
-//     //         // Schedule reminder 1 hour 
-//     //         var appDT = appointmentDT.clone().subtract({hours: 1});
+    //         // Schedule reminder 1 hour 
+    //         var appDT = appointmentDT.clone().subtract({hours: 1});
 
-//     //         // Send a reminder 
+    //         // Send a reminder 
          
-//     //         redi2medi.messages.create({
-//     //             originator : "REDI2MEDI",
-//     //             recipients : [ ],
-//     //             scheduledDatetime : appDT.format(),
-//     //             body : req.body.name + ", here's a reminder that you have a " + req.body.medication + " scheduled for " + appointmentDT.format('HH:mm') + ". See you soon!"
-//     //         }, function (err, response) {
-//     //             if (err) {
-//     //                 // Request has failed
-//     //                 console.log(err);
-//     //                 res.send("Error occured while sending message!");
-//     //             } else {
-//     //                 // Request was successful
-//     //                 console.log(response);
+    //         redi2medi.messages.create({
+    //             originator : "REDI2MEDI",
+    //             recipients : [ ],
+    //             scheduledDatetime : appDT.format(),
+    //             body : req.body.name + ", here's a reminder that you have a " + req.body.medication + " scheduled for " + appointmentDT.format('HH:mm') + ". See you soon!"
+    //         }, function (err, response) {
+    //             if (err) {
+    //                 // Request has failed
+    //                 console.log(err);
+    //                 res.send("Error occured while sending message!");
+    //             } else {
+    //                 // Request was successful
+    //                 console.log(response);
 
-//     //                 // Create and persist reminder object
-//     //                 var app = {
-//     //                     name : req.body.name,
-//     //                     medication : req.body.medication,
-//     //                     remname: req.body.remname,
-//     //                     appointmentDT : appointmentDT.format('Y-MM-DD HH:mm'),
-//     //                     appDT : appDT.format('Y-MM-DD HH:mm')
-//     //                 }
-//     //                 ReminderDatabase.push(app);
+    //                 // Create and persist reminder object
+    //                 var app = {
+    //                     name : req.body.name,
+    //                     medication : req.body.medication,
+    //                     remname: req.body.remname,
+    //                     appointmentDT : appointmentDT.format('Y-MM-DD HH:mm'),
+    //                     appDT : appDT.format('Y-MM-DD HH:mm')
+    //                 }
+    //                 ReminderDatabase.push(app);
     
-//     //                 // Render confirmation page
-//     //                 res.render('confirm', app);    
-//     //             }
-//     //         });
-//         }     
-//       );
+    //                 // Render confirmation page
+    //                 res.render('confirm', app);    
+    //             }
+    //         });
+        }     
+      );
 
      
 
