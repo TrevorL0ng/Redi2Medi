@@ -7,10 +7,9 @@ var bodyParser = require('body-parser');
 var moment = require('moment');
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    host: config.db.host,
-    user: config.db.user,
-    password: config.db.password,
-    database: config.db.database
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
   });
 
 connection.connect();
