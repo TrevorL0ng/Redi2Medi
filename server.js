@@ -6,11 +6,11 @@ const exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var moment = require('moment');
 var mysql = require('mysql');
-var connection = mysql.createConnection({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-  });
+const dburl = process.env.MYSQL_ADDON 
+    ||   'mysql://' + process.env.DB_USER+ ':' + process.env.DB_PASS 
+        + '@localhost/' + process.env.DB_NAME
+
+const conn = mysql.createConnection(dburl);
 
 connection.connect();
 
