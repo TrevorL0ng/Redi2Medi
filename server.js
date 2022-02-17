@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var moment = require('moment');
 const helpers = require('./utils/helpers');
 const routes = require('./controllers');
+var redi2medi = require('messagebird')(process.env.MESSAGEBIRD_API_KEY);
 // const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const app = express();
 const PORT = process.env.PORT || 3001;
