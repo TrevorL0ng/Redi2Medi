@@ -6,7 +6,12 @@ const exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var moment = require('moment');
 var mysql = require('mysql');
-var connection = mysql.createConnection(process.env.JAWSDB_URL);
+var connection = mysql.createConnection({
+    host: config.db.host,
+    user: config.db.user,
+    password: config.db.password,
+    database: config.db.database
+  });
 
 connection.connect();
 
