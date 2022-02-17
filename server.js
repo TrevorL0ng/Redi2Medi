@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 // Import express-session. Get over here.
 const session = require('cookie-session');
+const sequelize = require('./config/connection');
 const exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var moment = require('moment');
