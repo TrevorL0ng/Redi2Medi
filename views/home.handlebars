@@ -3,20 +3,20 @@
     <p><strong>{{error}}</strong></p>
 {{/if}}
 <form method="post" action="/schedule">
-    <div>
+    <div class="form-floating">
         <label>Your name:</label>
         <br />
-        <input type="text" name="name" value="{{name}}" />
+        <input class="form-control" id="floatingInput" type="text" name="name" value="{{name}}" />
     </div>
-    <div>
+    <div class="form-floating">
         <label>Your medication information</label>
         <br />
-        <input type="text" name="medication" value="{{medication}}" />
+        <input class="form-control" id="floatingInput" type="text" name="medication" value="{{medication}}" />
     </div>
-    <div>
+    <div class="form-floating">
         <label>Name your reminder:</label>
         <br />
-        <input type="text" name="remname" value="{{remname}}" />        
+        <input class="form-control" id="floatingInput" type="text" name="remname" value="{{remname}}" />        
     </div>
     <div>
         <label>Date and Time:</label>
@@ -25,6 +25,6 @@
         <input type="time" name="time" value="{{time}}" />
     </div>
     <div>
-        <button type="submit">Create a reminder</button>
+        <button type="submit" class="w-100 btn btn-lg btn-outline-success">Create a reminder</button>
     </div>
 </form>
