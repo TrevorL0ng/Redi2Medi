@@ -22,6 +22,8 @@ const routes = require('./controllers');
 const sequelize = require('./config/connection');
 const helpers = require('./utils/helpers');
 
+require('dotenv').config();
+
 // initialize redi2medi SDK
 // var redi2medi = require('redi2medi')(process.env.REDI2MEDI_API_KEY);
 
