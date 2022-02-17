@@ -1,46 +1,22 @@
 const path = require('path');
 const express = require('express');
 // Import express-session. Get over here.
-const session = require('express-session');
+const session = require('cookie-session');
 const exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var moment = require('moment');
-var mysql = require('mysql');
-var connection = mysql.createConnection(process.env.JAWSDB_URL);
-
-connection.connect();
-
-connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-  if (err) throw err;
-
-  console.log('The solution is: ', rows[0].solution);
-});
-
-connection.end();
-
-connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-  if (err) throw err;
-
-  console.log('The solution is: ', rows[0].solution);
-});
-
-connection.end();
-
-const routes = require('./controllers');
-const sequelize = require('./config/connection');
-const helpers = require('./utils/helpers');
-
-// initialize redi2medi SDK
-// var redi2medi = require('redi2medi')(process.env.REDI2MEDI_API_KEY);
-
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Set up sessions. Wow. Nice.
 const sess = {
   secret: 'Super secret secret',
+  cookie: {},
   resave: false,
   saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize,
+  }),
 };
 
 app.use(session(sess));
@@ -49,13 +25,17 @@ const hbs = exphbs.create({ helpers });
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
-app.use(bodyParser.urlencoded({ extended : true }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
+
+sequelize.sync({ force: false }).then(() => {
+  app.listen(PORT, () => console.log('Now listening'));
+});
+
 
 // Display reminder page
 app.get('/', function(req, res) {
