@@ -5,18 +5,19 @@ const session = require('express-session');
 const exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var moment = require('moment');
-var mysql = require('mysql');
-var connection = mysql.createConnection(process.env.JAWSDB_URL);
+//var mysql = require('mysql');
+//var connection = mysql.createConnection(process.env.JAWSDB_URL);
 
-connection.connect();
+//connection.connect();
 
-connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-  if (err) throw err;
+//connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
+//  if (err) throw err;
 
-  console.log('The solution is: ', rows[0].solution);
-});
+//  console.log('The solution is: ', rows[0].solution);
+//  });
 
-connection.end();
+// connection.end();
+var ReminderDatabase = [];
 
 const routes = require('./controllers');
 const sequelize = require('./config/connection');
@@ -25,7 +26,7 @@ const helpers = require('./utils/helpers');
 require('dotenv').config();
 
 // initialize redi2medi SDK
-// var redi2medi = require('redi2medi')(process.env.REDI2MEDI_API_KEY);
+var redi2medi = require('messagebird')(process.env.MESSAGEBIRD_API_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -55,7 +56,7 @@ app.use(routes);
 app.get('/', function(req, res) {
     // we can put minimum amount of hours from now on for the reminder for example 1 hour
     var defaultDT = moment().add({hours:1, minutes:0});
-    res.render('login', {
+    res.render('home', {
         date : defaultDT.format('Y-MM-DD'),
         time : defaultDT.format('HH:mm')
     });
@@ -65,15 +66,16 @@ app.get('/', function(req, res) {
 app.post('/schedule', function(req, res) {
     
     // Check if user has provided input for all form fields
-    if (!req.body.name || !req.body.medication || !req.body.remname || !req.body.date || !req.body.time
-        || req.body.name == '' || req.body.medication == '' || req.body.remname == ''
+    if (!req.body.name || !req.body.medication || !req.body.remname || !req.body.number || !req.body.date || !req.body.time
+        || req.body.name == '' || req.body.medication == '' || req.body.remname == '' || req.body.number == '' 
         || req.body.date == '' || req.body.time == '') {
             // If no, throw an error
-            res.render('login', {
+            res.render('home', {
                 error : "Please fill all required fields!",
                 name : req.body.name,
                 medication : req.body.medication,
                 remname: req.body.remname,
+                number: req.body.number,
                 date : req.body.date,
                 time : req.body.time
             });
@@ -85,7 +87,7 @@ app.post('/schedule', function(req, res) {
     var appointmentDT = moment(req.body.date+" "+req.body.time);
     if (appointmentDT.isBefore(earliestPossibleDT)) {
         // If not, show an error
-        res.render('login', {
+        res.render('home', {
             error : "You can only schedule reminder that are at least 1 hour in the future!",
             name : req.body.name,
             medication : req.body.medication,
@@ -96,45 +98,89 @@ app.post('/schedule', function(req, res) {
         return;
     }
 
+    // Check if phone number is valid
+    redi2medi.lookup.read(req.body.number, process.env.COUNTRY_CODE, function (err, response) {
+      console.log(err);
+      console.log(response);
+
+      if (err && err.errors[0].code == 21) {
+          // This error code indicates that the phone number has an unknown format
+          res.render('home', {
+              error : "You need to enter a valid phone number!",
+              name : req.body.name,
+              treatment : req.body.treatment,
+              number: req.body.number,
+              date : req.body.date,
+              time : req.body.time
+          });
+          return;
+      } else
+      if (err) {
+          // Some other error occurred
+          res.render('home', {
+              error : "Something went wrong while checking your phone number!",
+              name : req.body.name,
+              treatment : req.body.treatment,
+              number: req.body.number,
+              date : req.body.date,
+              time : req.body.time
+          });
+      } else
+      if (response.type != "fixed line or mobile") {
+          // The number lookup was successful but it is not a mobile number
+          res.render('home', {
+              error : "You have entered a valid phone number, but it's not a mobile number! Provide a mobile number so we can contact you via SMS.",
+              name : req.body.name,
+              treatment : req.body.treatment,
+              number: req.body.number,
+              date : req.body.date,
+              time : req.body.time
+          });
+      } else {
+          // Everything OK
+
+
      
-   // The push notification logic should go here, below is just example of a the logic for 
+   
    // SMS notification that I found in one of the tutorials
 
-    //         // Schedule reminder 1 hour 
-    //         var appDT = appointmentDT.clone().subtract({hours: 1});
+             // Schedule reminder 1 hour 
+             var appDT = appointmentDT.clone().subtract({hours: 1});
 
-    //         // Send a reminder 
-         
-    //         redi2medi.messages.create({
-    //             originator : "REDI2MEDI",
-    //             recipients : [ ],
-    //             scheduledDatetime : appDT.format(),
-    //             body : req.body.name + ", here's a reminder that you have a " + req.body.medication + " scheduled for " + appointmentDT.format('HH:mm') + ". See you soon!"
-    //         }, function (err, response) {
-    //             if (err) {
-    //                 // Request has failed
-    //                 console.log(err);
-    //                 res.send("Error occured while sending message!");
-    //             } else {
-    //                 // Request was successful
-    //                 console.log(response);
+             // Send a reminder 
+        
+             redi2medi.messages.create({
+                 originator : "REDI2MEDI",
+                 recipients : [response.phoneNumber],
+                 scheduledDatetime : appDT.format(),
+                 body : req.body.name + ", here's a reminder that you have a " + req.body.medication + " scheduled for " + appointmentDT.format('HH:mm') + ". Thank you for using Redi2Medi"
+             }, function (err, response) {
+                 if (err) {
+                     // Request has failed
+                     console.log(err);
+                     res.send("Error occured while sending message!");
+                 } else {
+                     // Request was successful
+                     console.log(response);
 
-    //                 // Create and persist reminder object
-    //                 var app = {
-    //                     name : req.body.name,
-    //                     medication : req.body.medication,
-    //                     remname: req.body.remname,
-    //                     appointmentDT : appointmentDT.format('Y-MM-DD HH:mm'),
-    //                     appDT : appDT.format('Y-MM-DD HH:mm')
-    //                 }
-    //                 ReminderDatabase.push(app);
+                     // Create and persist reminder object
+                     var app = {
+                         name : req.body.name,
+                         medication : req.body.medication,
+                         remname: req.body.remname,
+                         number: req.body.number,
+                         appointmentDT : appointmentDT.format('Y-MM-DD HH:mm'),
+                         appDT : appDT.format('Y-MM-DD HH:mm')
+                     }
+                     ReminderDatabase.push(app);
     
-    //                 // Render confirmation page
-    //                 res.render('confirm', app);    
-    //             }
-    //         });
-        }     
-      );
+                     // Render confirmation page
+                     res.render('confirm', app);    
+                    }
+                  });
+              }     
+            });
+      });
 
      
 
