@@ -131,7 +131,7 @@ app.post('/schedule', function(req, res) {
    
 
              // Schedule reminder 1 hour 
-             var appDT = appointmentDT.clone().subtract({hours:1});
+            //  var appDT = appointmentDT.clone().subtract({hours:1});
 
              // Send a reminder 
         
