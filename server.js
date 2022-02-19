@@ -37,9 +37,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
 
-//sequelize.sync({ force: false }).then(() => {
-app.listen(PORT, () => {console.log('Now listening');
-});
+// //sequelize.sync({ force: false }).then(() => {
+// app.listen(PORT, () => {console.log('Now listening');
+// });
 
 
 // Display reminder page
@@ -50,10 +50,12 @@ app.get('/', function(req, res) {
 
 
     // we can put minimum amount of hours from now on for the reminder for example 1 hour
+
     var defaultDT = moment().add({hours:0, minutes:0});
+
     res.render('home', {
         date : defaultDT.format('Y-MM-DD'),
-        time : defaultDT.format('HH:mm')
+        time : defaultDT.format('hh:mm')
     });
 });
 
@@ -77,8 +79,8 @@ app.post('/schedule', function(req, res) {
             return;
     };
 
-    // Check if date/time is correct and at least 1 hour in the future
-    var earliestPossibleDT = moment().add({hours:1, minutes:0});
+    // // Check if date/time is correct and at least 1 hour in the future
+    var earliestPossibleDT = moment();
     var appointmentDT = moment(req.body.date+" "+req.body.time);
     if (appointmentDT.isBefore(earliestPossibleDT)) {
         // If not, show an error
@@ -144,7 +146,9 @@ app.post('/schedule', function(req, res) {
                  originator : "REDI2MEDI",
                  recipients : [response.phoneNumber],
                  scheduledDatetime : appDT.format(),
+
                  body : req.body.name + ", here's a reminder that you have a " + req.body.remname + " scheduled for " + appointmentDT.format('hh:mm A') + ". Thank you for using Redi2Medi"
+
              }, function (err, response) {
                  if (err) {
                      // Request has failed
@@ -160,10 +164,12 @@ app.post('/schedule', function(req, res) {
                          medication : req.body.medication,
                          remname: req.body.remname,
                          number: req.body.number,
+
                          appointmentDT : appointmentDT.format('MM-DD-Y hh:mm A'),
                          appDT : appDT.format('MM-DD-Y hh:mm A')
+
                      }
-                     ReminderDatabase.push(app);
+                    //  ReminderDatabase.push(app);
     
                      // Render confirmation page
                      res.render('confirm', app);    
@@ -175,8 +181,8 @@ app.post('/schedule', function(req, res) {
 
      
 
-// sequelize.sync({ force: false }).then(() => {
-// app.listen(PORT, () => console.log('Now listening'));
-// });  
+sequelize.sync({ force: false }).then(() => {
+app.listen(PORT, () => console.log('Now listening'));
+});  
 
 
