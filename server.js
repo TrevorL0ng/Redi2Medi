@@ -46,11 +46,11 @@ app.listen(PORT, () => {console.log('Now listening');
 // Display reminder page
 app.get('/', function(req, res) {
     // we can put minimum amount of hours from now on for the reminder for example 1 hour
-    var defaultDT = moment().add({hours:1, minutes:0});
-    res.render('home', {
-        date : defaultDT.format('Y-MM-DD'),
-        time : defaultDT.format('HH:mm')
-    });
+    //var defaultDT = moment().add({hours:1, minutes:0});
+    //res.render('home', {
+       // date : defaultDT.format('Y-MM-DD'),
+       // time : defaultDT.format('HH:mm')
+    //});
 });
 
 // Process an incoming reminder
