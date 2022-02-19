@@ -9,7 +9,8 @@ var moment = require('moment');
 const helpers = require('./utils/helpers');
 const routes = require('./controllers');
 var redi2medi = require('messagebird')(process.env.MESSAGEBIRD_API_KEY);
-// const SequelizeStore = require('connect-session-sequelize')(session.Store);
+var ReminderDatabase = [];
+//const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -36,8 +37,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
 
-sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => console.log('Now listening'));
+//sequelize.sync({ force: false }).then(() => {
+app.listen(PORT, () => {console.log('Now listening');
 });
 
 
@@ -77,7 +78,7 @@ app.post('/schedule', function(req, res) {
     if (appointmentDT.isBefore(earliestPossibleDT)) {
         // If not, show an error
         res.render('home', {
-            error : "You can only schedule reminder that are at least 1 hour in the future!",
+            error : "You can only schedule reminders that are at least 1 hour in the future!",
             name : req.body.name,
             medication : req.body.medication,
             remname: req.body.remname,
@@ -127,14 +128,10 @@ app.post('/schedule', function(req, res) {
           });
       } else {
           // Everything OK
-
-
-     
    
-   // SMS notification that I found in one of the tutorials
 
              // Schedule reminder 1 hour 
-             var appDT = appointmentDT.clone().subtract({hours: 1});
+             var appDT = appointmentDT.clone().subtract({hours:1});
 
              // Send a reminder 
         
@@ -142,7 +139,7 @@ app.post('/schedule', function(req, res) {
                  originator : "REDI2MEDI",
                  recipients : [response.phoneNumber],
                  scheduledDatetime : appDT.format(),
-                 body : req.body.name + ", here's a reminder that you have a " + req.body.medication + " scheduled for " + appointmentDT.format('HH:mm') + ". Thank you for using Redi2Medi"
+                 body : req.body.name + ", here's a reminder that you have a " + req.body.remname + " scheduled for " + appointmentDT.format('HH:mm') + ". Thank you for using Redi2Medi"
              }, function (err, response) {
                  if (err) {
                      // Request has failed
@@ -174,7 +171,7 @@ app.post('/schedule', function(req, res) {
      
 
 // sequelize.sync({ force: false }).then(() => {
-//   app.listen(PORT, () => console.log('Now listening'));
+// app.listen(PORT, () => console.log('Now listening'));
 // });  
 
 
