@@ -42,15 +42,19 @@ app.listen(PORT, () => {console.log('Now listening');
 });
 
 
-
 // Display reminder page
 app.get('/', function(req, res) {
+    // Render login page
+// res.render('login');
+
+
+
     // we can put minimum amount of hours from now on for the reminder for example 1 hour
-    //var defaultDT = moment().add({hours:1, minutes:0});
-    //res.render('home', {
-       // date : defaultDT.format('Y-MM-DD'),
-       // time : defaultDT.format('HH:mm')
-    //});
+    var defaultDT = moment().add({hours:0, minutes:0});
+    res.render('home', {
+        date : defaultDT.format('Y-MM-DD'),
+        time : defaultDT.format('HH:mm')
+    });
 });
 
 // Process an incoming reminder
@@ -140,7 +144,7 @@ app.post('/schedule', function(req, res) {
                  originator : "REDI2MEDI",
                  recipients : [response.phoneNumber],
                  scheduledDatetime : appDT.format(),
-                 body : req.body.name + ", here's a reminder that you have a " + req.body.remname + " scheduled for " + appointmentDT.format('HH:mm') + ". Thank you for using Redi2Medi"
+                 body : req.body.name + ", here's a reminder that you have a " + req.body.remname + " scheduled for " + appointmentDT.format('hh:mm A') + ". Thank you for using Redi2Medi"
              }, function (err, response) {
                  if (err) {
                      // Request has failed
@@ -156,8 +160,8 @@ app.post('/schedule', function(req, res) {
                          medication : req.body.medication,
                          remname: req.body.remname,
                          number: req.body.number,
-                         appointmentDT : appointmentDT.format('Y-MM-DD HH:mm'),
-                         appDT : appDT.format('Y-MM-DD HH:mm')
+                         appointmentDT : appointmentDT.format('MM-DD-Y hh:mm A'),
+                         appDT : appDT.format('MM-DD-Y hh:mm A')
                      }
                      ReminderDatabase.push(app);
     
