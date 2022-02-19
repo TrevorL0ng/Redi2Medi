@@ -5,9 +5,6 @@ var bodyParser = require('body-parser');
 var moment = require('moment');
 const PORT = process.env.PORT || 3001;
 
-// Load configuration from .env file
-require('dotenv').config();
-
 // initialize redi2medi SDK
 var redi2medi = require('redi2medi')(process.env.REDI2MEDI_API_KEY);
 
@@ -47,7 +44,7 @@ app.post('/schedule', function(req, res) {
                 time : req.body.time
             });
             return;
-    }
+    };
 
     // Check if date/time is correct and at least 1 hour in the future
     var earliestPossibleDT = moment().add({hours:1, minutes:0});
