@@ -42,6 +42,7 @@ app.listen(PORT, () => {console.log('Now listening');
 });
 
 
+
 // Display reminder page
 app.get('/', function(req, res) {
     // we can put minimum amount of hours from now on for the reminder for example 1 hour
