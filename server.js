@@ -45,7 +45,7 @@ app.use(routes);
 // Display reminder page
 app.get('/', function(req, res) {
     // we can put minimum amount of hours from now on for the reminder for example 1 hour
-    var defaultDT = moment().add({hours:1, minutes:0});
+    var defaultDT = moment().format();
     res.render('home', {
         date : defaultDT.format('Y-MM-DD'),
         time : defaultDT.format('HH:mm')
