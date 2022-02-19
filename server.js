@@ -72,21 +72,21 @@ app.post('/schedule', function(req, res) {
             return;
     };
 
-    // Check if date/time is correct and at least 1 hour in the future
-    var earliestPossibleDT = moment().add({hours:1, minutes:0});
-    var appointmentDT = moment(req.body.date+" "+req.body.time);
-    if (appointmentDT.isBefore(earliestPossibleDT)) {
-        // If not, show an error
-        res.render('home', {
-            error : "You can only schedule reminders that are at least 1 hour in the future!",
-            name : req.body.name,
-            medication : req.body.medication,
-            remname: req.body.remname,
-            date : req.body.date,
-            time : req.body.time
-        });
-        return;
-    }
+    // // Check if date/time is correct and at least 1 hour in the future
+    // var earliestPossibleDT = moment().add({hours:1, minutes:0});
+    // var appointmentDT = moment(req.body.date+" "+req.body.time);
+    // if (appointmentDT.isBefore(earliestPossibleDT)) {
+    //     // If not, show an error
+    //     res.render('home', {
+    //         error : "You can only schedule reminders that are at least 1 hour in the future!",
+    //         name : req.body.name,
+    //         medication : req.body.medication,
+    //         remname: req.body.remname,
+    //         date : req.body.date,
+    //         time : req.body.time
+    //     });
+    //     return;
+    // }
 
     // Check if phone number is valid
     redi2medi.lookup.read(req.body.number, process.env.COUNTRY_CODE, function (err, response) {
