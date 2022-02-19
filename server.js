@@ -37,9 +37,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
 
-//sequelize.sync({ force: false }).then(() => {
-app.listen(PORT, () => {console.log('Now listening');
-});
+// //sequelize.sync({ force: false }).then(() => {
+// app.listen(PORT, () => {console.log('Now listening');
+// });
 
 
 // Display reminder page
@@ -158,7 +158,7 @@ app.post('/schedule', function(req, res) {
                          appointmentDT : appointmentDT.format('Y-MM-DD HH:mm'),
                          appDT : appDT.format('Y-MM-DD HH:mm')
                      }
-                     ReminderDatabase.push(app);
+                    //  ReminderDatabase.push(app);
     
                      // Render confirmation page
                      res.render('confirm', app);    
@@ -170,8 +170,8 @@ app.post('/schedule', function(req, res) {
 
      
 
-// sequelize.sync({ force: false }).then(() => {
-// app.listen(PORT, () => console.log('Now listening'));
-// });  
+sequelize.sync({ force: false }).then(() => {
+app.listen(PORT, () => console.log('Now listening'));
+});  
 
 
