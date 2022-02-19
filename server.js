@@ -139,7 +139,7 @@ app.post('/schedule', function(req, res) {
                  originator : "REDI2MEDI",
                  recipients : [response.phoneNumber],
                  scheduledDatetime : appDT.format(),
-                 body : req.body.name + ", here's a reminder that you have a " + req.body.remname + " scheduled for " + appointmentDT.format('HH:mm') + ". Thank you for using Redi2Medi"
+                 body : req.body.name + ", here's a reminder that you have a " + req.body.remname + " scheduled for " + appointmentDT.format('hh:mm AA') + ". Thank you for using Redi2Medi"
              }, function (err, response) {
                  if (err) {
                      // Request has failed
