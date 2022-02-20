@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 // Import express-session. Get over here.
-const session = require('cookie-session');
+const session = require('express-session');
 const sequelize = require('./config/connection');
 const exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
@@ -12,7 +12,7 @@ var redi2medi = require('messagebird')(process.env.MESSAGEBIRD_API_KEY);
 var ReminderDatabase = [];
 //const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3003;
 
 const sess = {
   secret: 'Super secret secret',
@@ -51,11 +51,10 @@ app.get('/', function(req, res) {
 
     // we can put minimum amount of hours from now on for the reminder for example 1 hour
 
-    var defaultDT = moment().add({hours:0, minutes:0});
-
-    res.render('home', {
+    var defaultDT = moment();
+    res.render('login', {
         date : defaultDT.format('Y-MM-DD'),
-        time : defaultDT.format('hh:mm')
+        time : defaultDT.format('HH:mm')
     });
 });
 
@@ -147,6 +146,7 @@ app.post('/schedule', function(req, res) {
                  recipients : [response.phoneNumber],
                  scheduledDatetime : appDT.format(),
 
+
                  body : req.body.name + ", here's a reminder that you have a " + req.body.remname + " scheduled for " + appointmentDT.format('hh:mm A') + ". Thank you for using Redi2Medi"
 
              }, function (err, response) {
@@ -164,6 +164,7 @@ app.post('/schedule', function(req, res) {
                          medication : req.body.medication,
                          remname: req.body.remname,
                          number: req.body.number,
+
 
                          appointmentDT : appointmentDT.format('MM-DD-Y hh:mm A'),
                          appDT : appDT.format('MM-DD-Y hh:mm A')
