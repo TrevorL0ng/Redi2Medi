@@ -45,11 +45,6 @@ app.use(routes);
 // Display reminder page
 app.get('/', function(req, res) {
     // Render login page
-// res.render('login');
-
-
-
-    // we can put minimum amount of hours from now on for the reminder for example 1 hour
 
     var defaultDT = moment();
     res.render('login', {
@@ -57,6 +52,18 @@ app.get('/', function(req, res) {
         time : defaultDT.format('HH:mm')
     });
 });
+
+app.post('/reminder', function(req, res){
+
+    var defaultDT = moment();
+    res.render('home', {
+          date : defaultDT.format('Y-MM-DD'),
+          time : defaultDT.format('HH:mm') 
+    });
+  
+  });
+  
+
 
 // Process an incoming reminder
 app.post('/schedule', function(req, res) {
@@ -170,7 +177,7 @@ app.post('/schedule', function(req, res) {
                          appDT : appDT.format('MM-DD-Y hh:mm A')
 
                      }
-                    //  ReminderDatabase.push(app);
+                      ReminderDatabase.push(app);
     
                      // Render confirmation page
                      res.render('confirm', app);    

@@ -2,6 +2,17 @@
 {{#if error}}
     <p><strong>{{error}}</strong></p>
 {{/if}}
+
+<nav>
+    <!-- If the user is logged in, show a logout button -->
+    {{#if loggedIn}}
+    <button id="logout" class="btn-no-style">Logout</button>
+    {{else}}
+    <!-- Otherwise, show a link to login -->
+    <a href="/login">Login</a>
+    {{/if}}
+  </nav>
+  
 <form method="post" action="/schedule">
     <div class="form-floating">
         <label>Your name:</label>
