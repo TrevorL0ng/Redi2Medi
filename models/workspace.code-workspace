@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\uncc-virt-bo-fsf-pt-10-2021-u-b\\14-MVC"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}
