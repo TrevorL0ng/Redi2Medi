@@ -1,45 +1,7 @@
-const path = require('path');
-const express = require('express');
-// Import express-session. Get over here.
-const session = require('express-session');
-const sequelize = require('./config/connection');
-const exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var moment = require('moment');
-const helpers = require('./utils/helpers');
-const routes = require('./controllers');
 var redi2medi = require('messagebird')(process.env.MESSAGEBIRD_API_KEY);
 var ReminderDatabase = [];
-//const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const app = express();
-const PORT = process.env.PORT || 3003;
-
-const sess = {
-  secret: 'Super secret secret',
-//   cookie: {},
-  resave: false,
-  saveUninitialized: true
-//   store: new SequelizeStore({
-//     db: sequelize,
-//   }),
-};
-
-app.use(session(sess));
-
-const hbs = exphbs.create({ helpers });
-
-app.engine('handlebars', hbs.engine);
-app.set('view engine', 'handlebars');
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(routes);
-
-// //sequelize.sync({ force: false }).then(() => {
-// app.listen(PORT, () => {console.log('Now listening');
-// });
 
 
 // Display reminder page
@@ -187,11 +149,3 @@ app.post('/schedule', function(req, res) {
               }     
             });
       });
-
-     
-
-sequelize.sync({ force: false }).then(() => {
-app.listen(PORT, () => console.log('Now listening'));
-});  
-
-
