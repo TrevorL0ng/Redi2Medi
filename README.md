@@ -1,5 +1,5 @@
  
-   [![License: MIT](https://img.https://shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
+   [![License: MIT](https://shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
    # REDI2MEDI
    ## https://github.com/TrevorL0ng
    
