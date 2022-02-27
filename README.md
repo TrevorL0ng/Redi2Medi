@@ -9,11 +9,12 @@
    
    ## Table of Contents  
    * [Installation](#installation)
-   * [Usage](#usage)
+   * [Issues](#issues)
    * [Contributors](#contibutors)
    * [License](#license)
    * [Contributing](#contributing)
    * [Questions](#questions)
+   
    
    ## Installation 
    
@@ -31,9 +32,11 @@
    * Run the app with:
       node server.js
 
-   ## Usage
+   ## Issues
    
-   You will need to create a profile in order to use this app.
+   We are still working on login logic, however we added guest option, which allows to use app without signing in, or creating account. Currently there is a test api key, that is tied to Trevor's phone number, if you click continue as a guest and use this number +17047967193, you will be able to see app functionality, it will take you to the confirmation page. Unfortunately in order to use any phone number and be able to send real messages we have to pay for the subscription. We were given some free real life messages, but we ran out of them during testing process. Please, see an example of of real life SMS on the screenshot below.
+
+   ![Mockup-image](assets/images/Screenshot_20220227-173442_Messages.jpg)
 
    ## Contributors
 
